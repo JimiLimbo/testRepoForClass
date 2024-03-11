@@ -5,3 +5,5 @@
 'flutter_test.sql' should be able to be imported to your phpMyAdmin.
 
 Should run after that.
+
+Pretty basic stuff but it is all connected.
