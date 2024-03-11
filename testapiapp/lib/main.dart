@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
             minHeight: MediaQuery.of(context).size.height * 1.1, // Adjust the multiplier as needed
             maxHeight: MediaQuery.of(context).size.height * 1.1, // Adjust the multiplier as needed
             child: Image.asset(                                  // I think it looks good
-              'assets/images/myCampusMarket.png',  // I can get more images for the rest of the backgrounds too
+              'assets/images/myCampusMarket.png',  // I can get more images for the rest of the backgrounds too, unless we just want colors.
               fit: BoxFit.cover, // Cover ensures the image covers the screen area without distortion
             ),
           ),
