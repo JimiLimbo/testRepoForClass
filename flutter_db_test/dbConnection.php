@@ -2,9 +2,9 @@
 
 // Database connection parameters
 $host = 'localhost';
-$dbname = 'your_database_name';
-$username = 'your_username';
-$password = 'your_password';
+$dbname = 'flutter_test';
+$username = 'root';
+$password = 'mysql';
 
 try {
     // Establish a connection to the MySQL database using PDO
