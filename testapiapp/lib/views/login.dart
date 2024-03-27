@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:testapiapp/views/signUp.dart';
 import 'package:testapiapp/views/aboutUs.dart';
+import 'package:testapiapp/views/mainMenu.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -8,6 +12,10 @@ class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
+
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   // Method to navigate to the sign-up page
   void _navigateToSignUp(BuildContext context) {
@@ -25,14 +33,56 @@ class LoginPage extends StatefulWidget {
     );
   }
 
-class _LoginPageState extends State<LoginPage> {
-    @override
+  // Method to handle login button press
+void _login(BuildContext context) async {
+  // Extract email and password from text fields
+  String email = emailController.text;
+  String password = passwordController.text;
+
+  // Make HTTP POST request to your backend API
+  var url = Uri.parse('http://10.0.2.2/flutter_db_test/getUsers.php');
+  var response = await http.post(
+    url,
+    body: {
+      'email': email,
+      'password': password,
+    },
+  );
+
+  // Check if the request was successful (status code 200)
+  if (response.statusCode == 200) {
+    // Parse the response JSON
+    var data = json.decode(response.body);
+
+    // Check if authentication was successful based on the response from the server
+    if (data['authenticated'] == true) {
+      // Navigate to MainMenuPage upon successful authentication
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainMenuPage()),
+      );
+    } else {
+      // Display an error message if authentication fails
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed. Please check your credentials.')),
+      );
+    }
+  } else {
+    // Handle HTTP error (e.g., server error)
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('An error occurred. Please try again later.')),
+    );
+  }
+}
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
       ),
-      body: Center( // Wrap with Center widget to center vertically
+      body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -43,12 +93,13 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 10),
-              Container( // Wrap TextField with Container for styling
+              Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), // Rounded corners
-                  color: Colors.grey[200], // Box background color
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.grey[200],
                 ),
                 child: TextField(
+                  controller: emailController,
                   // Add email text input field
                 ),
               ),
@@ -58,19 +109,21 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 10),
-              Container( // Wrap TextField with Container for styling
+              Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), // Rounded corners
-                  color: Colors.grey[200], // Box background color
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.grey[200],
                 ),
                 child: TextField(
+                  controller: passwordController,
+                  obscureText: true,
                   // Add password text input field
                 ),
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Implement login functionality
+                  _login(context); // Call _login method on button press
                 },
                 child: Text('Sign In'),
               ),
@@ -87,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              Spacer(), // Spacer widget to push "About Us" and version to the bottom
+              Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -119,3 +172,4 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
