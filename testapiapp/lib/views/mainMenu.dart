@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testapiapp/views/login.dart';
 
 class MainMenuPage extends StatelessWidget {
   @override
@@ -6,6 +7,28 @@ class MainMenuPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Main Menu'),
+        actions: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  _logout(context); // Call _logout method on button press
+                },
+                icon: Icon(Icons.logout), // Icon for logout button
+              ),
+            ],
+          ),
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -67,5 +90,17 @@ class MainMenuPage extends StatelessWidget {
       ),
     );
   }
+
+  // Method to handle logout button press
+  void _logout(BuildContext context) {
+    // Clear the user session
+    // You may need to implement this logic based on how your session management is done
+    // For example, you may need to clear session variables and navigate back to the login page
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()), // Navigate back to the login page
+    );
+  }
 }
+
 

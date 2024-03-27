@@ -17,63 +17,63 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  // Method to navigate to the sign-up page
-  void _navigateToSignUp(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SignUpPage()), // Navigate to sign-up page
-    );
-  }
-
-  // Method to navigate to the About Us page
-  void _navigateToAboutUs(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => AboutUsPage()), // Navigate to About Us page
-    );
-  }
-
-  // Method to handle login button press
-void _login(BuildContext context) async {
-  // Extract email and password from text fields
-  String email = emailController.text;
-  String password = passwordController.text;
-
-  // Make HTTP POST request to your backend API
-  var url = Uri.parse('http://10.0.2.2/flutter_db_test/getUsers.php');
-  var response = await http.post(
-    url,
-    body: {
-      'email': email,
-      'password': password,
-    },
-  );
-
-  // Check if the request was successful (status code 200)
-  if (response.statusCode == 200) {
-    // Parse the response JSON
-    var data = json.decode(response.body);
-
-    // Check if authentication was successful based on the response from the server
-    if (data['authenticated'] == true) {
-      // Navigate to MainMenuPage upon successful authentication
-      Navigator.pushReplacement(
+    // Method to navigate to the sign-up page
+    void _navigateToSignUp(BuildContext context) {
+      Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MainMenuPage()),
-      );
-    } else {
-      // Display an error message if authentication fails
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed. Please check your credentials.')),
+        MaterialPageRoute(builder: (context) => SignUpPage()), // Navigate to sign-up page
       );
     }
-  } else {
-    // Handle HTTP error (e.g., server error)
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('An error occurred. Please try again later.')),
-    );
-  }
-}
+
+    // Method to navigate to the About Us page
+    void _navigateToAboutUs(BuildContext context) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AboutUsPage()), // Navigate to About Us page
+      );
+    }
+
+    // Method to handle login button press
+    void _login(BuildContext context) async {
+      // Extract email and password from text fields
+      String email = emailController.text;
+      String password = passwordController.text;
+
+      // Make HTTP POST request to your backend API
+      var url = Uri.parse('http://10.0.2.2/flutter_db_test/getUsers.php');
+      var response = await http.post(
+        url,
+        body: {
+          'email': email,
+          'password': password,
+        },
+      );
+
+      // Check if the request was successful (status code 200)
+      if (response.statusCode == 200) {
+        // Parse the response JSON
+        var data = json.decode(response.body);
+
+        // Check if authentication was successful based on the response from the server
+        if (data['success'] == true) {
+          // Navigate to MainMenuPage upon successful authentication
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => MainMenuPage()),
+          );
+        } else {
+          // Display an error message if authentication fails
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Login failed. Please check your credentials.')),
+          );
+        }
+      } else {
+        // Handle HTTP error (e.g., server error)
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('An error occurred. Please try again later.')),
+        );
+      }
+    }
 
 
   @override
@@ -88,37 +88,21 @@ void _login(BuildContext context) async {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                'Email:',
-                style: TextStyle(fontSize: 18),
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.grey[200],
-                ),
-                child: TextField(
-                  controller: emailController,
-                  // Add email text input field
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'Password:',
-                style: TextStyle(fontSize: 18),
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.grey[200],
+              TextField(
+                controller: passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
                 ),
-                child: TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  // Add password text input field
-                ),
+                obscureText: true,
               ),
               SizedBox(height: 20),
               ElevatedButton(
